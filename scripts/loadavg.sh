@@ -14,14 +14,14 @@ get_num_of_cores(){
   is_osx && sysctl -n hw.ncpu || nproc
 }
 
-main(){ 
+main(){
   local num_cores=$([ "$loadavg_per_cpu_core" == "true" ]  && get_num_of_cores || echo 1)
 
-  uptime | awk -v num_cores="$num_cores" '{ 
+  uptime | awk -v num_cores="$num_cores" '{
     sub(/,$/, "", $(NF-2));
     sub(/,$/, "", $(NF-1));
     sub(/,$/, "", $NF);
-    printf "%.2f %.2f %.2f", $(NF-2)/num_cores, $(NF-1)/num_cores, $NF/num_cores
+    printf "%d.%d.%d", $(NF-2)/num_cores*100, $(NF-1)/num_cores*100, $NF/num_cores*100
   }'
 }
 
